@@ -12,9 +12,11 @@ http.createServer((req, res) => {
     else if(url.parse(req.url, true).pathname === '/'){
         fs.readFile('index.html' , 'utf-8' , (err , data) => {
             if(err){
-                res.writeHead(404 , { 'Content-Type' : 'text/html' })
-                res.write('Error')
-                return res.end()
+                fs.readFile('404.html' ,'utf-8' , (err,edata) => {
+                    res.writeHead(200 , { 'Content-Type' : 'text/html' })
+                    res.write(data)
+                    res.end()
+                })
             }
             res.writeHead(200 , { 'Content-Type' : 'text/html' })
             res.write(data)
