@@ -12,6 +12,7 @@ http.createServer((req, res) => {
                     res.write(edata)
                     return res.end()
                 })
+                return
             }
             res.writeHead(200, { 'Content-Type': 'text/html' })
             res.write(data)
@@ -24,8 +25,9 @@ http.createServer((req, res) => {
                 fs.readFile('404.html', 'utf-8', (err, edata) => {
                     res.writeHead(404, { 'Content-Type': 'text/html' })
                     res.write(edata)
-                    res.end()
+                    return res.end()
                 })
+                return
             }
             res.writeHead(200, { 'Content-Type': 'text/html' })
             res.write(data)
