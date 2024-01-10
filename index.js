@@ -1,37 +1,39 @@
-const http = require('node:http')
+const express = require('express')
 const fs = require('node:fs')
-const url = require('node:url')
+const app = express()
+const port = 8080
 
-http.createServer((req, res) => {
-    if (url.parse(req.url, true).pathname !== '/favicon.ico' && url.parse(req.url, true).pathname !== '/') {
-        let filename = url.parse(req.url, true).pathname.slice(1) + '.html';
-        fs.readFile(filename, 'utf-8', (err, data) => {
-            if (err) {
-                fs.readFile('404.html', 'utf-8', (err, edata) => {
-                    res.writeHead(404, { 'Content-Type': 'text/html' })
-                    res.write(edata)
-                    return res.end()
-                })
-                return
-            }
-            res.writeHead(200, { 'Content-Type': 'text/html' })
-            res.write(data)
-            return res.end()
-        })
-    }
-    else if (url.parse(req.url, true).pathname === '/') {
-        fs.readFile('index.html', 'utf-8', (err, data) => {
-            if (err) {
-                fs.readFile('404.html', 'utf-8', (err, edata) => {
-                    res.writeHead(404, { 'Content-Type': 'text/html' })
-                    res.write(edata)
-                    return res.end()
-                })
-                return
-            }
-            res.writeHead(200, { 'Content-Type': 'text/html' })
-            res.write(data)
-            return res.end()
-        })
-    }
-}).listen(8080)
+app.get('/', (req, res) => {
+    fs.readFile('index.html', 'utf-8', (err, data) => {
+        res.writeHead(200, { 'Content-Type': 'text/html' })
+        res.write(data)
+        return res.end()
+    })
+})
+
+app.get('/about', (req, res) => {
+    fs.readFile('about.html', 'utf-8', (err, data) => {
+        res.writeHead(200, { 'Content-Type': 'text/html' })
+        res.write(data)
+        return res.end()
+    })
+})
+
+app.get('/contact-me', (req, res) => {
+    fs.readFile('contact-me.html', 'utf-8', (err, data) => {
+        res.writeHead(200, { 'Content-Type': 'text/html' })
+        res.write(data)
+        return res.end()
+    })
+})
+
+
+app.all('*' , (req , res)=> {
+    fs.readFile('404.html', 'utf-8', (err, edata) => {
+        res.writeHead(404, { 'Content-Type': 'text/html' })
+        res.write(edata)
+        return res.end()
+    })
+})
+
+app.listen(port, function () {})
